@@ -5,6 +5,7 @@ HELP.md
 !**/src/test/**/build/
 
 ### IntelliJ IDEA ###
+.idea/
 .idea
 *.iws
 *.iml
@@ -20,3 +21,11 @@ build/
 # Docker
 *.jar
 *.war
+
+# H2 Database Files
+data/
+
+# 기타 OS별 임시 파일
+*.log
+.DS_Store
+Thumbs.db
