@@ -5,7 +5,7 @@ import com.bakery.dalcom.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/rest/api/v1/users")
 public class UserController {
 
     private final UserService userService;
@@ -19,9 +19,9 @@ public class UserController {
         return userService.saveUser(user);
     }
 
-    @GetMapping("/{username}")
-    public User getUserByUsername(@PathVariable String username) {
-        return userService.findByUsername(username)
+    @GetMapping("/{userEid}")
+    public User getUserByUsername(@PathVariable int userEid) {
+        return userService.findByUserEid(userEid)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
