@@ -20,7 +20,7 @@ public class UserController {
     }
 
     @GetMapping("/{userEid}")
-    public User getUserByUsername(@PathVariable int userEid) {
+    public User getUserByUsername(@PathVariable long userEid) {
         return userService.findByUserEid(userEid)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
