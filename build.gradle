@@ -18,16 +18,25 @@ repositories {
 }
 
 dependencies {
+	// Spring Boot 기본 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// 개발 도구
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	// 테스트 의존성
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	runtimeOnly 'com.h2database:h2'
+
+	// maria DB
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	// flyway
+	implementation 'org.flywaydb:flyway-core:11.1.1'
+	implementation "org.flywaydb:flyway-mysql"
 }
 
 tasks.named('test') {
@@ -37,4 +46,3 @@ tasks.named('test') {
 tasks.named('bootJar') {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
-
