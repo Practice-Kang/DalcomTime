@@ -34,9 +34,10 @@ dependencies {
 	// maria DB
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
-	// flyway
-	implementation 'org.flywaydb:flyway-core:11.1.1'
-	implementation "org.flywaydb:flyway-mysql"
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 }
 
 tasks.named('test') {
