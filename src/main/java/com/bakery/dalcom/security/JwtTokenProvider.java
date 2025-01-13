@@ -5,10 +5,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
@@ -19,18 +21,31 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration-time}")
     private long jwtExpirationInMillis;
 
-    // 토큰 생성 메서드
+    @Value("${jwt.refresh-expiration-time}")
+    private long jwtRefreshExpirationInMillis;
+
     public String generateToken(String username) {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return Jwts.builder()
                 .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMillis))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // 토큰에서 사용자명 추출
+    public String generateRefreshToken(String username) {
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwtRefreshExpirationInMillis))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    // ✅ Added the missing method
     public String getUsername(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -41,7 +56,18 @@ public class JwtTokenProvider {
         return claims.getSubject();
     }
 
-    // 토큰 유효성 검증
+    public long getJwtRefreshExpirationInMillis() {
+        return jwtRefreshExpirationInMillis;
+    }
+
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -54,9 +80,9 @@ public class JwtTokenProvider {
         }
     }
 
-    // 서명 키 가져오기
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
+
