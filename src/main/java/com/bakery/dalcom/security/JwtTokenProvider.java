@@ -60,6 +60,10 @@ public class JwtTokenProvider {
         return jwtRefreshExpirationInMillis;
     }
 
+    public long getJwtExpirationInMillis() {
+        return jwtExpirationInMillis;
+    }
+
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
