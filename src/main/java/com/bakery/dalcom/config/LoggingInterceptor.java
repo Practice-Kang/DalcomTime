@@ -20,9 +20,7 @@ public class LoggingInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        if (ex != null) {
-            logger.error("Exception occurred: {}", ex.getMessage());
-        }
+        logger.error("Exception occurred: {}", ex.getMessage());
         logger.info("Response Status: {}", response.getStatus());
     }
 }
